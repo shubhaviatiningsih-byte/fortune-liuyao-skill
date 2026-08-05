@@ -78,6 +78,8 @@ HTML 或 Markdown 卦盘 + 核心结论 + 判断过程 + 条件性应期
 
 从 [GitHub Releases](https://github.com/shubhaviatiningsih-byte/fortune-liuyao-skill/releases/latest) 下载 `fortune-liuyao.skill` 并安装，然后直接在 Agent 对话中提出问题。Agent 会用单选弹窗询问自动、逐爻或硬币/爻值起卦；当前客户端不支持弹窗时显示简短文字选项。问题方向、目标和期限优先从文字中理解；问题本身不足以起卦时，Agent 会先询问一个必要的澄清问题。
 
+当前源码版只要求宿主可调用 Python 3.10+；`lunar_python==1.4.8` 已按 MIT 许可证内置。如果宿主 Agent 已内置并允许调用 Python，用户无需另外操作；完全没有 Python 运行时的电脑暂不能执行确定性排盘。可用 `python scripts/run_liuyao.py --selfcheck` 一次检查运行条件、金标盘和展示文件。
+
 不能启动本地网页时，也可以直接告诉智能体：
 
 ```text

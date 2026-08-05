@@ -2,7 +2,10 @@
 
 from __future__ import annotations
 
+import argparse
+import json
 import re
+from pathlib import Path
 from typing import Any
 
 
@@ -38,3 +41,23 @@ def verify_report(text: str, response: dict[str, Any]) -> dict[str, Any]:
         "scope": "explicit_deterministic_chart_claims_only",
         "unrestricted": ["吉凶判断", "应期推断", "传统取象", "作用链主次"],
     }
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Audit explicit chart facts in a completed interpretation")
+    parser.add_argument("--chart", required=True, type=Path, help="Unified run JSON or raw chart JSON")
+    parser.add_argument("--report", required=True, type=Path, help="Completed Markdown or text interpretation")
+    parser.add_argument("--output", type=Path)
+    args = parser.parse_args()
+    response = json.loads(args.chart.read_text(encoding="utf-8"))
+    result = verify_report(args.report.read_text(encoding="utf-8"), response.get("result", response))
+    text = json.dumps(result, ensure_ascii=False, indent=2)
+    if args.output:
+        args.output.write_text(text + "\n", encoding="utf-8")
+    else:
+        print(text)
+    raise SystemExit(0 if result["accepted"] else 2)
+
+
+if __name__ == "__main__":
+    main()
