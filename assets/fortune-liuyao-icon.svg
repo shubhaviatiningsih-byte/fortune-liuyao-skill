@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Fortune 六爻图形标</title>
+  <desc id="desc">圆角墨绿色图标，以手写字母 F 和六条爻线组成</desc>
+  <rect width="512" height="512" rx="116" fill="#20262A"/>
+  <path d="M128 372 C165 232 165 123 281 119 C332 117 364 143 377 179 C342 165 305 164 271 181 C223 205 218 264 205 330 C193 389 157 414 111 405" fill="none" stroke="#F4EEDC" stroke-width="31" stroke-linecap="round"/>
+  <path d="M207 231 C253 219 295 219 347 228" fill="none" stroke="#F4EEDC" stroke-width="27" stroke-linecap="round"/>
+  <g fill="#C65D47">
+    <rect x="267" y="299" width="57" height="13" rx="6.5"/>
+    <rect x="339" y="299" width="57" height="13" rx="6.5"/>
+    <rect x="258" y="326" width="138" height="13" rx="6.5"/>
+    <rect x="267" y="353" width="57" height="13" rx="6.5"/>
+    <rect x="339" y="353" width="57" height="13" rx="6.5"/>
+    <rect x="258" y="380" width="138" height="13" rx="6.5"/>
+    <rect x="267" y="407" width="57" height="13" rx="6.5"/>
+    <rect x="339" y="407" width="57" height="13" rx="6.5"/>
+    <rect x="258" y="434" width="138" height="13" rx="6.5"/>
+  </g>
+</svg>

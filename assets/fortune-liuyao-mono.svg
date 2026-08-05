@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="220" viewBox="0 0 900 220" role="img" aria-labelledby="title desc">
+  <title id="title">Fortune 六爻单色标志</title>
+  <desc id="desc">适合单色印刷与深浅背景的 Fortune 六爻字标</desc>
+  <g fill="#111713">
+    <text x="28" y="145" font-family="Segoe Script, Brush Script MT, Snell Roundhand, cursive" font-size="132" font-style="italic" font-weight="700" letter-spacing="-7">Fortune</text>
+    <text x="658" y="142" font-family="Noto Serif SC, Songti SC, SimSun, serif" font-size="60" font-weight="600" letter-spacing="10">六爻</text>
+  </g>
+  <path d="M42 170 C198 209 412 197 610 169" fill="none" stroke="#111713" stroke-width="8" stroke-linecap="round"/>
+</svg>

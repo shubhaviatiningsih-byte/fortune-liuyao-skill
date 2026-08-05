@@ -1,0 +1,10 @@
+interface:
+  display_name: "Fortune 六爻"
+  short_description: "文王纳甲六爻排盘、硬币起卦、规则事实与完整解读"
+  icon_small: "./assets/fortune-liuyao-icon.svg"
+  icon_large: "./assets/fortune-liuyao-horizontal.svg"
+  brand_color: "#20262A"
+  default_prompt: "使用 $fortune-liuyao 为我的问题起卦；若我未指定方式，先用单选弹窗让我选择自动、逐爻或硬币/爻值，再排盘并完整解读。"
+
+policy:
+  allow_implicit_invocation: true

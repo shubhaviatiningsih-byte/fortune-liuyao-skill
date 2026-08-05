@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="220" viewBox="0 0 720 220" role="img" aria-labelledby="title desc">
+  <title id="title">Fortune 花字标志</title>
+  <desc id="desc">曜石色手写连笔 Fortune 字标，配朱砂色六爻笔触</desc>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M54 168 C120 201 250 198 357 178 C430 164 491 163 560 178" stroke="#C65D47" stroke-width="8"/>
+    <path d="M535 177 l24 0 m16 0 l24 0" stroke="#C65D47" stroke-width="8"/>
+    <path d="M603 177 l24 0 m16 0 l24 0" stroke="#C65D47" stroke-width="8"/>
+  </g>
+  <text x="34" y="146" fill="#20262A" font-family="Segoe Script, Brush Script MT, Snell Roundhand, cursive" font-size="132" font-style="italic" font-weight="700" letter-spacing="-7">Fortune</text>
+  <circle cx="593" cy="62" r="8" fill="#C65D47"/>
+</svg>
