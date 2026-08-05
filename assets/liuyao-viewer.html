@@ -25,7 +25,7 @@
   <script>
     const EMBEDDED_JSON="__LIUYAO_DATA__";
     const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-    const relationName=v=>({same_element:"比和",generates_original:"回头生",controls_original:"回头克",other:"动变",advance:"化进",retreat:"化退",none:""}[v]||v||"");
+    const relationName=v=>{const names={same_element:"比和",generates_original:"回头生",controls_original:"回头克",other:"动变",advance:"化进",retreat:"化退",none:""};return Object.prototype.hasOwnProperty.call(names,v)?names[v]:(v||"")};
     const methodName=v=>({auto:"自动起卦",manual_coins:"三枚硬币手动起卦",agent_recorded:"Agent 逐次记录",specified_lines:"指定六爻值"}[v]||v||"指定六爻值");
     const patternName=v=>({ordinary:"常规卦",six_clash:"六冲卦",six_harmony:"六合卦"}[v]||v||"常规卦");
     function glyph(yinYang){return yinYang==="阳"?'<span class="yang"></span>':'<span class="yin"><i></i><i></i></span>'}

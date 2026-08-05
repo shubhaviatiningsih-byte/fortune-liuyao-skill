@@ -54,7 +54,7 @@ def main() -> None:
     check(len(automatic) == 6 and all(row["value"] in (6, 7, 8, 9) for row in automatic), "automatic casting mismatch")
 
     markdown = render(tun)
-    check("水雷屯" in markdown and "泽雷随" in markdown and "| 爻位 |" in markdown, "Markdown chart mismatch")
+    check("水雷屯" in markdown and "泽雷随" in markdown and "| 爻位 |" in markdown and "伏神" in markdown, "Markdown chart mismatch")
     check("本内容基于玄学体系生成" in markdown, "Markdown safety disclaimer mismatch")
     check(_load_method("career")["methodId"] == "liuyao-career-v4", "career method version mismatch")
     check("先审题取用并处理用神多现" in SYSTEM_PROMPT, "interpretation order prompt mismatch")
