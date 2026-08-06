@@ -21,6 +21,9 @@ SYSTEM_PROMPT = """你是一名重视纳甲、用神、世应、月日动变与�
 ROUTING_POLICY = """领域路由由当前 Agent 根据用户完整问题的语义选择，只负责加载对应领域方法和提供初始关注点。routingGuidance 不是盘面事实，其中的用神、候选与应期候选均可在综合原问题和完整卦盘后说明理由并调整。chart 与 deterministicRuleFacts 才是不可改写的确定性事实。不要因为路由标签而忽略用户问题的真实目标，也不要向用户追加领域分类问题。"""
 
 
+DELIVERY_POLICY = """排盘展示不是最终回答。必须继续完成 analysisMethod 要求的综合解读，不得只复述卦名、六亲或给一段简短概括；但不要为了篇幅机械扩写。敏感分流放行、领域路由、脚本执行、事实校验通过等过程状态属于内部信息，成功时保持静默；只有问题被阻止或发现必须修正的事实冲突时才对用户说明必要结果。传统健康取象属于模型推断，不得伪装成医学诊断，也不得替代现实就医。"""
+
+
 METHOD_IDS = {
     "career": "liuyao-career-v4",
     "wealth": "liuyao-wealth-v1",
@@ -91,6 +94,9 @@ def _select_fields(analysis: dict[str, Any], fields: tuple[str, ...]) -> dict[st
 
 
 def build_packet(chart_response: dict[str, Any]) -> dict[str, Any]:
+    chart_response = chart_response.get("result") or chart_response
+    if not isinstance(chart_response, dict):
+        raise ValueError("chart response must be an object or contain an object at 'result'")
     chart = chart_response.get("chart")
     if not isinstance(chart, dict):
         raise ValueError("chart response must contain an object at 'chart'")
@@ -137,7 +143,7 @@ def build_packet(chart_response: dict[str, Any]) -> dict[str, Any]:
             "schoolProfile": chart.get("schoolProfile"),
         },
         "messages": [
-            {"role": "system", "content": f"{SYSTEM_PROMPT}\n{ROUTING_POLICY}"},
+            {"role": "system", "content": f"{SYSTEM_PROMPT}\n{ROUTING_POLICY}\n{DELIVERY_POLICY}"},
             {"role": "user", "content": json.dumps(payload, ensure_ascii=False)},
         ],
     }

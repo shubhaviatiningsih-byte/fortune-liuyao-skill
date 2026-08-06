@@ -20,6 +20,34 @@
 
 </div>
 
+## English summary
+
+**Fortune Liuyao** is a self-contained Agent Skill for deterministic Wenwang Najia / Six Lines divination (`六爻`, `文王纳甲`, `京房八宫`). It calculates the original and changed hexagrams, Najia, Six Relations, Six Spirits, Shi/Ying positions, void and broken branches, moving-line transformations, hidden spirits, and auditable rule facts before an AI Agent writes the interpretation.
+
+It works with skill-compatible desktop Agents such as OpenAI Codex, Claude Code, Cursor, WorkBuddy, and other Agent Skills hosts. One local Python command returns the chart data, interpretation prompt, standalone HTML chart, and Markdown fallback. No Fortune API, API key, web service, npm package, or external Python package installation is required.
+
+Search aliases: **Liuyao Skill**, **Six Lines Divination Skill**, **Wenwang Najia Skill**, **I Ching Agent Skill**, **六爻排盘 Skill**, **三枚硬币起卦**, **京房八宫排盘**.
+
+## 安装
+
+### Agent Skills CLI
+
+```bash
+npx skills add shubhaviatiningsih-byte/fortune-liuyao-skill -g -y
+```
+
+### GitHub Release 安装包
+
+从 [GitHub Releases](https://github.com/shubhaviatiningsih-byte/fortune-liuyao-skill/releases/latest) 下载 `fortune-liuyao.skill`，再导入支持 Agent Skills 的客户端。
+
+### Git 安装
+
+```bash
+git clone https://github.com/shubhaviatiningsih-byte/fortune-liuyao-skill.git
+```
+
+仓库根目录就是完整 Skill，包含 `SKILL.md`、确定性脚本、参考方法和展示资源。运行环境只需 Python 3.10+；`lunar_python` 已按 MIT 许可证内置。
+
 ![六爻排盘与规则事实展示](assets/standalone-chart.png)
 
 ## 我们真正想做的事
@@ -78,6 +106,8 @@ HTML 或 Markdown 卦盘 + 核心结论 + 判断过程 + 条件性应期
 
 从 [GitHub Releases](https://github.com/shubhaviatiningsih-byte/fortune-liuyao-skill/releases/latest) 下载 `fortune-liuyao.skill` 并安装，然后直接在 Agent 对话中提出问题。Agent 会用单选弹窗询问自动、逐爻或硬币/爻值起卦；当前客户端不支持弹窗时显示简短文字选项。问题方向、目标和期限优先从文字中理解；问题本身不足以起卦时，Agent 会先询问一个必要的澄清问题。
 
+当前源码版只要求宿主可调用 Python 3.10+；`lunar_python==1.4.8` 已按 MIT 许可证内置。如果宿主 Agent 已内置并允许调用 Python，用户无需另外操作；完全没有 Python 运行时的电脑暂不能执行确定性排盘。可用 `python scripts/run_liuyao.py --selfcheck` 一次检查运行条件、金标盘和展示文件。
+
 不能启动本地网页时，也可以直接告诉智能体：
 
 ```text
@@ -87,11 +117,13 @@ HTML 或 Markdown 卦盘 + 核心结论 + 判断过程 + 条件性应期
 
 也可以让 Agent 逐次记录六轮结果，或把自己线下摇出的六次硬币结果一次性交给 Skill。
 
-运行本地脚本前安装历法依赖：
+无需执行 `pip install`。首次运行可用以下命令检查 Python、内置历法、确定性引擎和渲染器：
 
 ```bash
-pip install -r requirements.txt
+python -S scripts/run_liuyao.py --selfcheck
 ```
+
+返回 `READY` 后即可使用；`-S` 验证运行过程没有依赖系统 `site-packages`。
 
 ## 自己摇硬币也可以
 
@@ -191,6 +223,39 @@ Skill 默认由当前电脑 Agent 在对话中完成排盘与解读；起卦方�
 
 因为一段听起来顺畅的文字不等于盘面正确。保留卦盘、规则事实和判断主线，用户才能看见结论从哪里来，也能在事后复盘哪些条件真正发生了。
 
+## 可核验能力矩阵
+
+下面只列入当前仓库脚本能够确定性计算或明确交付的能力，不把模型自由推断包装成程序能力。
+
+| 维度 | 当前实现 | 核验入口 |
+|---|---|---|
+| 起卦 | 自动、逐爻交互、六次硬币/爻值输入；统一按初爻到上爻 | `cast_lines.py`、`cast_one_line.py` |
+| 历法 | 起卦时刻、干支、月建、旬空、节气窗口；Asia/Shanghai 固定 UTC+8 兜底 | `run_liuyao.py --selfcheck` |
+| 基础排盘 | 本卦、变卦、京房八宫、卦宫、世应、纳甲、六亲、六神 | `liuyao_core.py` |
+| 动变结构 | 动爻、变爻六亲、回头生克、化进化退等确定性关系 | `liuyao_core.py` |
+| 扩展事实 | 伏神飞神、空破、日冲、冲合刑害、三合结构候选 | `deterministicRuleFacts` |
+| 领域分析 | Agent 语义路由到事业、财富、感情、学业、出行、住宅、家庭、纠纷或通用方法 | `domain-routing.md`、`domain-methods.json` |
+| 输出 | 同一次运行生成独立 HTML 与 Markdown 卦盘 | `artifacts.html`、`artifacts.markdown` |
+| 防编造 | 报告生成后审计明确盘面断言；只锁盘面事实，不限制吉凶、应期和传统推断 | `verify_facts.py` |
+| 安全边界 | 对医疗诊断、生死、胎儿性别、失踪定位等高风险问题确定性分流 | `classify_sensitive.py` |
+| 外部服务 | 不调用 Fortune API，不需要 API key、网页服务或联网排盘 | 本地统一入口 |
+
+## 公开验证记录
+
+`v1.0.0` 发布候选已经完成以下检查：
+
+- 独立回归测试：`47/47` 通过；
+- 干净安装包：63 个正式文件，不包含测试目录、E2E 产物、`__pycache__` 或 `.pyc`；
+- 隔离运行：`python -S scripts/run_liuyao.py --selfcheck` 返回 `READY`；
+- 干净仓库实际起卦：同一次调用成功生成 HTML 与 Markdown；
+- 真实 Codex Agent E2E：完成自动起卦、完整解读、双格式交付与报告事实审计，审计结果为 `accepted=true`、0 个事实错误。
+
+测试边界：真实 Agent E2E 已覆盖自动起卦；宿主客户端特有的“连续六次选择弹窗”依赖宿主交互能力，目前由行为契约和脚本测试覆盖，尚未作为跨客户端统一 E2E 结论。
+
+## 与 MCP/API 项目的定位区别
+
+本仓库首先是可直接安装到桌面 Agent 的本地 Skill，不是常驻 MCP Server。它把确定性引擎、交互契约、领域方法和输出模板打包在一起，适合不希望配置 API、端口或后台服务的用户。MCP、API、npm 分发属于未来可选适配层，不是当前排盘正确性的依赖。
+
 ## 项目结构
 
 项目采用渐进式加载：入口保持简洁，只有命中具体任务时才读取对应参考文件。
@@ -219,15 +284,17 @@ fortune-liuyao/
 │   ├── liuyao_core.py               # 独立纳甲排盘与核心规则事实
 │   ├── cast_lines.py                # 自动起卦与手动硬币换算
 │   ├── cast_one_line.py             # 逐爻交互时生成单爻
-│   ├── run_liuyao.py                # 一次返回 result + prompt
+│   ├── run_liuyao.py                # 统一返回 result、prompt、HTML 与 Markdown
 │   ├── build_chart.py               # 本地生成完整卦盘 JSON
 │   ├── build_model_packet.py        # 组装盘面、规则事实与方法提示
 │   ├── classify_sensitive.py        # 确定性敏感问题分流
 │   ├── verify_facts.py              # 明确盘面事实审计
 │   ├── render_chart.py              # 输出独立 HTML 卦面
-│   ├── render_chart_text.py         # 输出 Markdown 卦盘
-│   └── test_standalone.py           # 独立运行金标回归
-└── requirements.txt                 # 本地历法换算依赖
+│   └── render_chart_text.py         # 输出 Markdown 卦盘
+├── vendor/
+│   ├── lunar_python/                # 内置历法运行库
+│   └── lunar_python-LICENSE         # 上游 MIT 许可证
+└── requirements.txt                 # 内置依赖版本与来源声明
 ```
 
 <details>

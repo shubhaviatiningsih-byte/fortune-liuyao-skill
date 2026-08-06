@@ -8,7 +8,14 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import datetime, timedelta
+from pathlib import Path
+import sys
 from typing import Any, Iterable
+
+
+VENDOR_DIR = Path(__file__).resolve().parents[1] / "vendor"
+if (VENDOR_DIR / "lunar_python").is_dir() and str(VENDOR_DIR) not in sys.path:
+    sys.path.insert(0, str(VENDOR_DIR))
 
 
 STEMS = tuple("甲乙丙丁戊己庚辛壬癸")
@@ -114,7 +121,7 @@ def derive_calendar(moment: datetime, day_boundary_policy: str = "zi_hour") -> d
             "next": {"name": next_jieqi.getName(), "date": str(next_jieqi.getSolar())},
         },
         "dayBoundaryPolicy": day_boundary_policy,
-        "calendarLibrary": "lunar_python",
+        "calendarLibrary": "lunar_python_vendored",
         "calendarLibraryVersion": "1.4.8",
     }
 

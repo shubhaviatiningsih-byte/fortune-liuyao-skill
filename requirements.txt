@@ -1,1 +1,2 @@
-lunar_python==1.4.8
+# No external Python packages are required at runtime.
+# lunar_python==1.4.8 is vendored under vendor/ with its MIT license.
