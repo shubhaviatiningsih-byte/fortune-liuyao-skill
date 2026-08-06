@@ -13,7 +13,7 @@
   <img alt="文王纳甲" src="https://img.shields.io/badge/体系-文王纳甲-d99a39?style=flat-square" />
   <img alt="确定性排盘" src="https://img.shields.io/badge/排盘-确定性计算-526b62?style=flat-square" />
   <img alt="三种起卦" src="https://img.shields.io/badge/起卦-自动%20%7C%20逐次%20%7C%20硬币-c65d47?style=flat-square" />
-  <img alt="双格式卦盘" src="https://img.shields.io/badge/输出-HTML%20%7C%20Markdown-20262a?style=flat-square" />
+  <img alt="聊天完整解读" src="https://img.shields.io/badge/输出-聊天完整解读%20%7C%20HTML卦盘-20262a?style=flat-square" />
 </p>
 
 **[核心能力](#它不只是一个占卜提示词) · [快速开始](#30-秒开始一次占问) · [手动摇卦](#自己摇硬币也可以) · [项目结构](#项目结构)**
@@ -24,7 +24,7 @@
 
 **Fortune Liuyao** is a self-contained Agent Skill for deterministic Wenwang Najia / Six Lines divination (`六爻`, `文王纳甲`, `京房八宫`). It calculates the original and changed hexagrams, Najia, Six Relations, Six Spirits, Shi/Ying positions, void and broken branches, moving-line transformations, hidden spirits, and auditable rule facts before an AI Agent writes the interpretation.
 
-It works with skill-compatible desktop Agents such as OpenAI Codex, Claude Code, Cursor, WorkBuddy, and other Agent Skills hosts. One local Python command returns the chart data, interpretation prompt, standalone HTML chart, and Markdown fallback. No Fortune API, API key, web service, npm package, or external Python package installation is required.
+It works with skill-compatible desktop Agents such as OpenAI Codex, Claude Code, Cursor, WorkBuddy, and other Agent Skills hosts. One local Python command returns the chart data, interpretation prompt, and standalone HTML chart; the current Agent must provide the complete written interpretation directly in chat. Markdown remains internal for review and fact auditing. No Fortune API, API key, web service, npm package, or external Python package installation is required.
 
 Search aliases: **Liuyao Skill**, **Six Lines Divination Skill**, **Wenwang Najia Skill**, **I Ching Agent Skill**, **六爻排盘 Skill**, **三枚硬币起卦**, **京房八宫排盘**.
 
@@ -99,7 +99,7 @@ git clone https://github.com/shubhaviatiningsih-byte/fortune-liuyao-skill.git
         ↓
 综合判断：连接用神、世应、月日、动变与现实语境
         ↓
-HTML 或 Markdown 卦盘 + 核心结论 + 判断过程 + 条件性应期
+聊天中的完整文字解读 + 可选 HTML 可视化卦盘
 ```
 
 ## 30 秒开始一次占问
@@ -191,7 +191,7 @@ Skill 默认由当前电脑 Agent 在对话中完成排盘与解读；起卦方�
 
 - 宿主支持选择控件时，显示自动、逐爻、硬币／爻值三个选项；不支持时降级为简短文字选项；
 - 支持 HTML 文件产物时，生成可独立打开的可视卦盘；
-- 只能返回文字时，生成结构完整的 Markdown 卦盘；
+- 无论是否能交付 HTML，都在聊天中直接输出完整文字解读；Markdown 只用于内部复核和事实审计；
 - 两种格式都保留本卦、变卦、世应、动爻、空破、伏神、变爻关系和初爻至上爻的输入顺序；
 - 解读失败时，已经完成的排盘仍然可以单独查看和保存。
 
@@ -235,7 +235,7 @@ Skill 默认由当前电脑 Agent 在对话中完成排盘与解读；起卦方�
 | 动变结构 | 动爻、变爻六亲、回头生克、化进化退等确定性关系 | `liuyao_core.py` |
 | 扩展事实 | 伏神飞神、空破、日冲、冲合刑害、三合结构候选 | `deterministicRuleFacts` |
 | 领域分析 | Agent 语义路由到事业、财富、感情、学业、出行、住宅、家庭、纠纷或通用方法 | `domain-routing.md`、`domain-methods.json` |
-| 输出 | 同一次运行生成独立 HTML 与 Markdown 卦盘 | `artifacts.html`、`artifacts.markdown` |
+| 输出 | 聊天中完整文字解读；同一次运行生成 HTML 卦盘，Markdown 仅供内部复核 | `prompt`、`artifacts.html`、`artifacts.markdown` |
 | 防编造 | 报告生成后审计明确盘面断言；只锁盘面事实，不限制吉凶、应期和传统推断 | `verify_facts.py` |
 | 安全边界 | 对医疗诊断、生死、胎儿性别、失踪定位等高风险问题确定性分流 | `classify_sensitive.py` |
 | 外部服务 | 不调用 Fortune API，不需要 API key、网页服务或联网排盘 | 本地统一入口 |
@@ -247,8 +247,8 @@ Skill 默认由当前电脑 Agent 在对话中完成排盘与解读；起卦方�
 - 独立回归测试：`47/47` 通过；
 - 干净安装包：63 个正式文件，不包含测试目录、E2E 产物、`__pycache__` 或 `.pyc`；
 - 隔离运行：`python -S scripts/run_liuyao.py --selfcheck` 返回 `READY`；
-- 干净仓库实际起卦：同一次调用成功生成 HTML 与 Markdown；
-- 真实 Codex Agent E2E：完成自动起卦、完整解读、双格式交付与报告事实审计，审计结果为 `accepted=true`、0 个事实错误。
+- 干净仓库实际起卦：同一次调用成功生成内部结果、HTML 卦盘与审计用 Markdown；
+- 真实 Codex Agent E2E：完成自动起卦、聊天内完整解读、HTML 卦盘交付与报告事实审计，审计结果为 `accepted=true`、0 个事实错误。
 
 测试边界：真实 Agent E2E 已覆盖自动起卦；宿主客户端特有的“连续六次选择弹窗”依赖宿主交互能力，目前由行为契约和脚本测试覆盖，尚未作为跨客户端统一 E2E 结论。
 
