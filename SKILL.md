@@ -1,6 +1,6 @@
 ---
 name: fortune-liuyao
-description: 当用户提出六爻占卜、六爻排盘、文王纳甲、京房八宫、三枚硬币起卦、手动输入六次爻值，或询问事业、感情、财富、学业等六爻问题时使用；英文 Liuyao、Six Lines Divination、Wenwang Najia、I Ching coin casting 也应触发。完成确定性排盘、领域方法加载、综合解读、HTML/Markdown 卦盘交付与事实一致性检查；对高风险医疗、生死、胎儿性别、失踪定位等问题只提供现实帮助。
+description: 当用户提出六爻占卜、六爻排盘、文王纳甲、京房八宫、三枚硬币起卦、手动输入六次爻值，或询问事业、感情、财富、学业等六爻问题时使用；英文 Liuyao、Six Lines Divination、Wenwang Najia、I Ching coin casting 也应触发。完成确定性排盘、领域方法加载、当前对话中的完整综合解读、HTML 卦盘交付与事实一致性检查；对高风险医疗、生死、胎儿性别、失踪定位等问题只提供现实帮助。
 ---
 
 # Fortune 六爻
@@ -103,20 +103,23 @@ python scripts/run_liuyao.py --question "用户原问题" --category general --m
 - `artifacts.html` 与 `artifacts.markdown`：从同一份结果同步生成的展示文件路径；
 - `schemaVersion`：输出契约版本。
 
-JSON 是脚本与 Agent 之间用于保存、复核和事实审计的内部契约。不要向用户粘贴 `session.json`、原始 JSON 或 `prompt`；最终用户只看卦盘文件、可读文字盘和完整解读。只有用户明确要求导出原始排盘数据时才交付 JSON。
+JSON 和 Markdown 是脚本与 Agent 之间用于保存、复核和事实审计的内部契约。不要向用户粘贴或附加 `session.json`、原始 JSON、`prompt` 或 Markdown 文件；最终用户在当前对话中直接阅读完整解读，HTML 只作为可选卦盘附件。只有用户明确要求导出原始排盘数据时才交付 JSON。
 
 不要再依次调用 `build_chart.py`、`build_model_packet.py` 和 `render_chart.py` 拼接默认流程。它们只作为内部组件和诊断工具。
 
 ## 4. 展示并完整解读
 
-先展示卦盘，再给出解读：
+最终聊天回复是主要且完整的用户交付物。无论 HTML 是否生成、交付或打开，都必须直接在当前对话中给出完整文字解读：
 
 - 宿主支持文件交付时，把 `artifacts.html` 作为可打开文件链接或附件；不要粘贴 HTML 源码，不要用代码编辑器打开它。
-- 同时可在文字回答中使用 `artifacts.markdown`。
-- HTML 无法交付或打开时，立即使用 Markdown；不要反复排查桌面文件关联。
-- 展示降级只影响卦盘载体，不得中断或缩短解读。
+- HTML 始终只是独立的可视化卦盘附件，不能替代、缩短或决定聊天窗口中的完整文字解读。
+- 不向用户交付 `artifacts.markdown`；Markdown 只供内部渲染、复核和事实审计。
+- HTML 无法交付或打开时，只说明可视化卦盘附件不可用；不要让用户打开 Markdown，也不要反复排查桌面文件关联。聊天中的完整文字解读照常输出。
+- 不得把完整文字解读设计成 HTML 的失败降级；它在所有成功排盘中都是必需输出。
 
-完整阅读 [interpretation-modes.md](references/interpretation-modes.md)，直接使用返回的 `prompt` 在当前对话中完成综合解读。不要把 `prompt` 发送给另一个模型，不要求用户提供模型 API 密钥。不要把已经完成的解读替换成“解读核心”、一句话总结或几条压缩结论，除非用户明确要求简版。
+完整阅读 [interpretation-modes.md](references/interpretation-modes.md)，直接使用返回的 `prompt` 在当前对话中完成综合解读。不要把 `prompt` 发送给另一个模型，不要求用户提供模型 API 密钥。最终回复不得只给“解读核心”、一句话总结、几条压缩结论或要求用户打开附件查看全文，除非用户明确要求简版。
+
+发送前静默检查：已经直接回答所问，解释了用神、世应、月日和关键动变如何支持结论，覆盖了会实质改变判断的其他结构；用户询问期限时已经回答时间趋势；已经给出现实建议，并把无法确定性验证的内容保持为传统推断。只在内部完成检查，不向用户展示清单、路由、安全分流、脚本状态或审计结果。
 
 传统健康、吉凶、应期和取象可以作为传统推断表达，但不得伪装成确定性盘面字段、医疗诊断或现实专业意见。
 

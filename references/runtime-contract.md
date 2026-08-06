@@ -31,10 +31,10 @@ python scripts/run_liuyao.py --selfcheck
 - `ok` / `blocked`：运行状态；
 - `result`：确定性结果；
 - `prompt`：当前 Agent 的完整解读上下文；
-- `artifacts.html` / `artifacts.markdown`：同源展示文件的绝对路径；
+- `artifacts.html` / `artifacts.markdown`：同源卦盘文件的绝对路径；HTML 可作为用户附件，Markdown 仅供内部复核；
 - `schemaVersion`：契约版本。
 
-统一 JSON 是脚本、Agent、渲染器和事实审计之间的内部数据合同，用于避免重复计算和字段错位。默认不向最终用户展示原始 JSON 或 `prompt`；用户只接收 HTML/Markdown 卦盘与完整解读，除非明确要求导出机器可读数据。
+统一 JSON 是脚本、Agent、渲染器和事实审计之间的内部数据合同，用于避免重复计算和字段错位。默认不向最终用户展示原始 JSON、`prompt` 或 Markdown；用户在当前对话中直接接收完整报告，HTML 仅作为可选卦盘附件，除非明确要求导出机器可读数据。
 
 `build_chart.py`、`build_model_packet.py`、`render_chart.py` 和 `render_chart_text.py` 是内部组件与诊断入口，不用于默认编排。
 
@@ -53,7 +53,7 @@ python scripts/verify_facts.py --chart session.json --report report.md --output 
 - 输入无效：指出缺少或冲突字段，修正后重新运行。
 - Python 或依赖缺失：说明缺少的运行条件，不生成半张盘。
 - 历法失败：停止排盘和解读。
-- HTML 交付失败：使用同批生成的 Markdown，继续完整解读。
+- HTML 交付失败：只省略可视化卦盘附件；聊天中的完整文字解读照常输出，不向用户交付 Markdown。
 - 解读失败：保留并交付已经生成的确定性卦盘。
 
 ## 版本审计
